@@ -1,0 +1,22 @@
+{
+  "name": "aviaok-app",
+  "description": "App for tests",
+  "version": "1.0.0",
+  "author": "Fedosov I.",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serv": "nodemon src\\server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.18.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+  }
+}
