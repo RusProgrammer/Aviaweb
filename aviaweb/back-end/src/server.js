@@ -9,6 +9,20 @@ var connection = mysql.createConnection({
   database: 'fedosov'
 })
 
+serv.get('/heads', function (req, res) {
+  var querry = "select * from names;"
+  connection.query(querry, function(err, rows){
+    if (err) console.log(err)
+    // Create the headers array
+    var headers = [];
+    for(var item in rows[0])
+        headers.push(item);
+    enabledHeaders = checkForShow(headers);
+    res.set('Access-Control-Allow-Origin', ['*'])
+    res.send(enabledHeaders);
+  })
+})
+
 serv.get('/bab', function (req, res) {
   //res.send('Hello World!');
   var querry = "select * from names;"
@@ -24,8 +38,9 @@ serv.get('/bab', function (req, res) {
     // Get only the enabled headers
     enabledHeaders = checkForShow(headers);
 
+    console.log(JSON.stringify(rows))
     // Get all data from RowDataPacket
-    rows.forEach(row => {
+    /* rows.forEach(row => {
         var rowData = []
         var id = 0;
         for(var item in row)
@@ -36,8 +51,11 @@ serv.get('/bab', function (req, res) {
             id++;
         }
         data.push(rowData);  
-    });
-    res.send({headers: headers, data: data});
+    }); 
+    
+    res.send({headers: headers, data: data}); */
+    res.set('Access-Control-Allow-Origin', ['*'])
+    res.send({data:rows});
    /*  console.log(headers)  
     console.log(data)  */ 
   })
