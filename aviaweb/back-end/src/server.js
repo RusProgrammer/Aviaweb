@@ -1,16 +1,44 @@
 var express = require('express');
+var bodyParser = require("body-parser");
 var serv = express();
 var mysql = require('mysql')
+serv.use(bodyParser.json());
+
+serv.use(async (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 var connection = mysql.createConnection({
   host: '172.20.1.47',
   user: 'fedosov',
   password: '321',
-  database: 'fedosov'
+  database: 'sid_fwa_09_07_2018_version_09c'
 })
 
+var connectionzah = mysql.createConnection({
+  host: '172.20.1.47',
+  user: 'fedosov',
+  password: '321',
+  database: 'kardailskiy'
+})
+
+//Delete item from list
+Array.prototype.remove = function() {
+  var what, a = arguments, L = a.length, ax;
+  while (L && this.length) {
+      what = a[--L];
+      while ((ax = this.indexOf(what)) !== -1) {
+          this.splice(ax, 1);
+      }
+  }
+  return this;
+};
+
 serv.get('/heads', function (req, res) {
-  var querry = "select * from names;"
+  var querry = "select * from discrete;"
   connection.query(querry, function(err, rows){
     if (err) console.log(err)
     // Create the headers array
@@ -23,9 +51,37 @@ serv.get('/heads', function (req, res) {
   })
 })
 
+serv.post('/auth', function (req, res){
+  res.set('Access-Control-Allow-Origin', ['*']);
+  var name = req.body.name
+  var pass = req.body.pass
+  console.log(name)
+  console.log(pass)
+  //TODO: log the entered user
+  var querry = 'select * from users where Surname ="' + name + '" and Password ="' + pass + '";'
+  connectionzah.query(querry, function(err, rows){
+    
+    if (err) 
+    {
+      console.log("Auth Error")
+      res.send(false)  
+    }
+    if(rows.length===1)
+    {
+      console.log("All ok")
+      res.send(true);
+    }
+    else
+    {
+      console.log("Auth length Error")
+      res.send(false);
+    }
+  }) 
+})
+
 serv.get('/bab', function (req, res) {
   //res.send('Hello World!');
-  var querry = "select * from names;"
+  var querry = "select * from discrete;"
   connection.query(querry, function(err, rows){
     if (err) console.log(err)
 
@@ -68,11 +124,30 @@ serv.listen(3000, function () {
   connection.connect(function(err) {
     if (err) console.log(err)
   })
+  connectionzah.connect(function(err) {
+    if (err) console.log(err)
+  })
 });
 
 function checkForShow(headersArray){
     /// TODO:
     /// Get list of the enabled headers
     /// and return them.
+    /* field = 'Parameter_name'
+    item_index = headersArray.indexOf(field)
+    console.log(item_index)
+    console.log(headersArray)
+    if (item_index > -1){
+      headersArray.remove(field)
+    }
+    console.log(headersArray) */
     return headersArray;
+}
+
+function execQuerry(connection, querry){
+  connection.query(querry, function(err, rows){
+    if (err) console.log(err)
+    // Create the headers array
+    return rows;
+  })
 }

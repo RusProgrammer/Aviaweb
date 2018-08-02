@@ -3,9 +3,9 @@
       <vuetable ref="vuetable"
             api-url="http://localhost:3000/bab"
             :fields="fieldss"
-  >     </vuetable> 
-        <span>{{ fieldss }}</span>
-        <button @click="setField()" value="setField"></button>
+  ></vuetable>
+      <vuetable-pagination ref=""></vuetable-pagination>
+    
     </div>
 </template>
 
