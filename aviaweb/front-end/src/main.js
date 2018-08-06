@@ -6,6 +6,13 @@ import Login from './Components/Login.vue'
 import Table from './Components/Tablecontent.vue'
 import Loginux from './Components/Loginux.vue'
 import store from '../Store/index.js'
+var VueAuth = require('vue-auth')
+ 
+Vue.use(VueAuth, {
+  storagePrefix: '_prefix.',
+  redirectType: 'router',
+  authPath : '/loginux'
+})
 
 Vue.use(VueRouter)
 

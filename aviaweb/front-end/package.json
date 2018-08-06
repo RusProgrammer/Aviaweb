@@ -17,6 +17,7 @@
     "body-parser": "^1.18.3",
     "preset": "^1.0.0",
     "vue": "^2.5.11",
+    "vue-auth": "^1.0.0-alpha.1",
     "vue-router": "^3.0.1",
     "vuetable": "^1.5.12",
     "vuex": "^3.0.1"

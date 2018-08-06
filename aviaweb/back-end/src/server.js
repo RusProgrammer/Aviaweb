@@ -2,6 +2,11 @@ var express = require('express');
 var bodyParser = require("body-parser");
 var serv = express();
 var mysql = require('mysql')
+//Auth modules
+const jwt = require('jsonwebtoken');
+
+
+jwtsecret = 'fedosov'
 serv.use(bodyParser.json());
 
 serv.use(async (req, res, next) => {
@@ -37,6 +42,55 @@ Array.prototype.remove = function() {
   return this;
 };
 
+serv.post('/api/login', function(req, res){
+  const user ={
+    id: 1,
+    username: 'brad',
+    email: 'brad@gmail.com'
+  }
+  
+  jwt.sign({user}, jwtsecret, (err,token)=>{
+    res.json({
+      token
+    });
+  })
+})
+
+serv.post('/api/posts', verifyToken, function(req, res){
+  jwt.verify(req.token, jwtsecret, (err, authdata)=>{
+    if(err){
+      res.sendStatus(403)
+    }else{
+      res.json({
+        message:'Post created',
+        authdata
+      })
+    }
+  })  
+})
+
+// FORMAT OF TOKEN
+// Authorization: Bearer <access_token>
+function verifyToken(req, res, next){
+  // Get auth header value
+  const bearerHeader = req.headers['authorization']
+  console.log(req.headers)
+  console.log(bearerHeader)
+  if(typeof bearerHeader !== 'undefined')
+  {
+    const bearer = bearerHeader.split(' ')
+    const bearerToken = bearer[1]
+    //set token
+    req.token = bearerToken;
+    next();
+  }else{
+    //forbidden
+    console.log('Token wasn\'t set ')
+    res.sendStatus(403);
+  }
+}
+
+
 serv.get('/heads', function (req, res) {
   var querry = "select * from discrete;"
   connection.query(querry, function(err, rows){
@@ -58,7 +112,7 @@ serv.post('/auth', function (req, res){
   console.log(name)
   console.log(pass)
   //TODO: log the entered user
-  var querry = 'select * from users where Surname ="' + name + '" and Password ="' + pass + '";'
+  var querry = 'select * from users where BINARY Surname ="' + name + '" and Password ="' + pass + '";'
   connectionzah.query(querry, function(err, rows){
     
     if (err) 
