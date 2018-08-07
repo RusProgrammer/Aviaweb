@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import {searchusr, authusr, login} from './searchuser.js'
 import {getHeaders} from './tablehelper.js'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
@@ -36,7 +37,8 @@ const strore = new Vuex.Store({
         search:searchusr,
         login:login,
         getheads:getHeaders
-    }
+    },
+    plugins: [createPersistedState()]
 })
 
 export default strore;
