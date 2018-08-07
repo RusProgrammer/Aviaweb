@@ -3,6 +3,7 @@
       <vuetable ref="vuetable"
             api-url="http://localhost:3000/bab"
             :fields="fieldss"
+            :http-options = httpOptions
   ></vuetable>
       <vuetable-pagination ref=""></vuetable-pagination>
     
@@ -28,26 +29,21 @@ export default {
     data: function(){
         return{
             fieldss:[],
+            httpOptions: {headers:{Authorization: 'Bearer ' + this.$store.getters.userToken}}
         }
     },
     methods:{
         getFields() {
-            let data =  axios({
-              method: 'get',
-              url: 'http://localhost:3000/heads',
-            }).then(response => {
-               return response.data
-            })
-            console.log(data)
+
         },
-        setField(){
-            this.fieldss = ['Name']
-        },
-        handleSuccess(resp){
-            this.fieldss = resp.data
-        }
     },
     created(){
+        /* let response = this.$store.dispatch('getheads');
+        this.fieldss = response
+        console.log(this.fieldss)
+        console.log(this.$store.getters.tableheaders) */
+        this.$store.dispatch('getheads');
+        console.log(this.$store.getters.tableheaders)
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:3000/heads', false);
         try {
@@ -61,22 +57,7 @@ export default {
         imgType = imgType.replaceAll("[","")       
         imgType = imgType.replaceAll("]","")       
         this.fieldss = imgType.split(' ')
-        console.log(imgType)
-        /* let self = this;
-        var conf ={
-            timeout: 8000
-        }
-        axios.get('http://localhost:3000/heads')
-        .then((resp)=>{
-            self.fieldss = resp.data;
-            console.log(self.fieldss)
-        })
-        .catch(function (err){
-            throw err;
-        })
-        
-        console.log(self.fieldss) */
-        
+        console.log(imgType)      
     }
 
 }  

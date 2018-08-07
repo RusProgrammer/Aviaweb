@@ -22,7 +22,7 @@ var router = new VueRouter({
     {path: '/about', component: Responseviewer},//about => About.vue
     {path: '/table', component: Table},//about => About.vue
     {path: '/app', component: App},//about => About.vue
-    {path: '/login', component: Login},
+    {path: '/login', component: Login, query: { redirect: '/table' }},
     {path: '/loginux', component: Loginux}
   ]
 })

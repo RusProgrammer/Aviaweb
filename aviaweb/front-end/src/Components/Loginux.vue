@@ -8,7 +8,7 @@
      <input required v-model="password" type="password" placeholder="Password"/>
      <hr/>
      <button type="submit">Login</button>
-     <h3>{{logged}}</h3>
+     <h3>{{usertoken}}</h3>
    </form>
  </div>
 </template>
@@ -19,29 +19,31 @@
       return{
         username: '',
         password: '',
-        usertoken:''
+        token:''
       }
     },
     computed:{
       logged: function(){
         return this.$store.getters.logged;
+      },
+      usertoken: function(){
+        return this.$store.getters.userToken;
       }
     },
     methods:{
       search(){
         this.$store.dispatch('search', this.querry,);
-        this.answer = this.$store.getters.results
       },
-      login(){
-        this.$auth.setToken('123')
-        console.log(this.$auth)
-        console.log(this.$auth.getToken())
-        this.$store.dispatch('login', {name:this.username, pass:this.password})
+      async login(){       
+        let response = await this.$store.dispatch('login', {name:this.username, pass:this.password});
+        this.token = response;
+        // Если пройдена авторизация, то показать TODO: Страницу приветствия
+        if(this.token != 'AuthError'){
+          this.$router.push({ name: '/loginux', query: { redirect: '/table' } });
+          this.$router.push(this.$route.query.redirect)
+        }
       }
-    },
-    created() {
-      //this.$store.dispatch('search', this.querry,);
-    },
+    }
   }
 
 </script>

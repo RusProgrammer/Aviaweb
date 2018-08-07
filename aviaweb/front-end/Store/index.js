@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import searchusr from './searchuser.js'
-import authusr from './searchuser.js'
+import {searchusr, authusr, login} from './searchuser.js'
+import {getHeaders} from './tablehelper.js'
 
 Vue.use(Vuex);
 
 const strore = new Vuex.Store({
     state:{
         results:[],
-        logged: false
+        logged: false,
+        tableheaders: [],
+        userToken: ''
     },
     getters:{
         results(state){
@@ -17,6 +19,12 @@ const strore = new Vuex.Store({
         },
         logged(state){
             return state.logged
+        },
+        userToken(state){
+            return state.userToken
+        },
+        tableheaders(state){
+            return state.tableheaders
         }
     },
     mutations:{
@@ -26,7 +34,8 @@ const strore = new Vuex.Store({
     },
     actions:{
         search:searchusr,
-        login:authusr
+        login:login,
+        getheads:getHeaders
     }
 })
 

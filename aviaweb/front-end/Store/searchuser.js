@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { resolve } from 'path';
+var async = require('async');
 
 function searchusr({state, dispatch, commit}, querry){
     const url = 'http://localhost:3000/users'
@@ -15,9 +17,6 @@ function searchusr({state, dispatch, commit}, querry){
 
 function authusr({state, dispatch, commit}, requestData){
     const url = 'http://localhost:3000/auth'
-    console.log(requestData.name)
-    console.log(requestData.pass)
-    console.log(requestData)
     const headers ={
         'Access-Control-Allow-Origin': ['*']
     }
@@ -32,4 +31,23 @@ function authusr({state, dispatch, commit}, requestData){
     
 }
 
-export default authusr
+async function login({state, dispatch, commit}, requestData){
+    const url = 'http://localhost:3000/api/login'
+    const headers ={
+        'Access-Control-Allow-Origin': ['*']
+    }
+    let res = await axios.post(url,requestData, headers)/* .then((resp)=>{
+        const uToken = resp.data.token;
+        commit('set', {type: 'userToken', items: uToken});
+        resolve(uToken)
+    })
+    .catch((err)=>{
+        throw err;
+    }) */
+    const uToken = res.data.token;
+    commit('set', {type: 'userToken', items: uToken});
+    return uToken;
+
+}
+
+export {authusr, searchusr, login};
