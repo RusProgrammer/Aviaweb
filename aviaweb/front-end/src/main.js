@@ -5,6 +5,7 @@ import Responseviewer from './Components/Responseviewer.vue'
 import Login from './Components/Login.vue'
 import Table from './Components/Tablecontent.vue'
 import Loginux from './Components/Loginux.vue'
+import Dropdown from './Components/etc/dropdown.vue'
 import store from '../Store/index.js'
 var VueAuth = require('vue-auth')
  
@@ -19,11 +20,12 @@ Vue.use(VueRouter)
 
 var router = new VueRouter({
   routes:[
-    {path: '/about', component: Responseviewer},//about => About.vue
+    {path: '/about', component: Dropdown},//about => About.vue
     {path: '/table', component: Table},//about => About.vue
     {path: '/app', component: App},//about => About.vue
     {path: '/login', component: Login, query: { redirect: '/table' }},
-    {path: '/loginux', component: Loginux}
+    {path: '/loginux', component: Loginux},
+    {path: '/refs', component: Responseviewer, props: true }
   ]
 })
 

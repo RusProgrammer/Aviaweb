@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { resolve } from 'path';
 var async = require('async');
 
 function searchusr({state, dispatch, commit}, querry){
@@ -31,23 +30,29 @@ function authusr({state, dispatch, commit}, requestData){
     
 }
 
+// Функция для получения токена доступа к данным
 async function login({state, dispatch, commit}, requestData){
     const url = 'http://localhost:3000/api/login'
     const headers ={
         'Access-Control-Allow-Origin': ['*']
     }
-    let res = await axios.post(url,requestData, headers)/* .then((resp)=>{
-        const uToken = resp.data.token;
-        commit('set', {type: 'userToken', items: uToken});
-        resolve(uToken)
-    })
-    .catch((err)=>{
-        throw err;
-    }) */
+    let res = await axios.post(url,requestData, headers)
     const uToken = res.data.token;
     commit('set', {type: 'userToken', items: uToken});
     return uToken;
-
 }
 
-export {authusr, searchusr, login};
+async function logout({state, dispatch, commit}){
+    commit('set', {type: 'userToken', items: ''});
+}
+
+async function getTables({state, dispatch, commit}){
+    const url = 'http://localhost:3000/api/tables'
+    let res = await axios.get(url, 
+        {headers: 
+        {'Authorization':'Bearer ' + this.getters.userToken}})
+    const Tables = res.data.tables;
+    return Tables;
+}
+
+export {authusr, searchusr, login, logout, getTables};

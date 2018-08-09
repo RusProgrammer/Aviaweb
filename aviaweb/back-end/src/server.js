@@ -126,6 +126,42 @@ serv.get('/heads', function (req, res) {
   })
 })
 
+// Функция для получения списка таблиц
+serv.get('/api/tables', verifyToken, function(req, res){
+  jwt.verify(req.token, jwtsecret, (err, authdata)=>{
+    if(err){
+      console.log("Token error in /api/tables")
+      res.sendStatus(403)
+    }else{
+      var querry = "SHOW TABLES"
+      connectionzah.query(querry, function(err, rows){
+        res.set('Access-Control-Allow-Origin', ['*'])
+        if (err){
+           console.log("Tables SQL1 error in /api/tables")
+           throw err
+        }
+        // Transform from RowDataPacket reprezentation
+        if(rows.length>1) {   
+          console.log("Tables is OK /api/tables")   
+          var data = []
+          rows.forEach(row => {
+            for(var item in row)
+            {
+                // Add values only for the enabled headers
+                data.push(row[item]);
+            }
+          });
+          res.json({tables:data});
+        }
+        else{
+          console.log("Tables SQL error in /api/tables")
+          res.sendStatus(403);
+        }
+      })
+    }
+  }) 
+})
+
 // Получение содержимого таблицы. Используется для отрисовки пользовательских
 // данных в элементах vuetable
 serv.get('/bab', verifyToken, function (req, res) {
@@ -164,6 +200,54 @@ serv.get('/bab', verifyToken, function (req, res) {
     res.set('Access-Control-Allow-Origin', ['*'])
     res.send({data:rows}); 
   })*/
+});
+
+// Получение содержимого указанной таблицы. Используется для отрисовки пользовательских
+// данных в элементах vuetable
+serv.get('/api/data/tables/:tablename', verifyToken, function (req, res) {
+  console.log("in tablename")
+  console.log(req.token)
+  jwt.verify(req.token, jwtsecret, (err, authdata)=>{
+    if(err){
+      res.sendStatus(403)
+    }else{
+      const table = req.params.tablename;
+      var querry = "select * from " + table + ";"
+      connectionzah.query(querry, function(err, rows){
+        if (err) throw err
+        console.log(123)
+        res.set('Access-Control-Allow-Origin', ['*'])
+        res.send({data:rows});
+      })
+    }
+  }) 
+});
+
+// Получение заголвков полей по имени таблицы. Используется для отрисовки пользовательских
+// данных в элементах vuetable
+serv.get('/api/data/headers/:tablename', verifyToken, function (req, res) {
+  console.log("in tablename")
+  console.log(req.token)
+  jwt.verify(req.token, jwtsecret, (err, authdata)=>{
+    if(err){
+      console.log("in tablename all bad")
+      res.sendStatus(403)
+    }else{
+      console.log("in tablename all ok")
+      const table = req.params.tablename;
+      var querry = "select * from "+ table + ";"
+      connectionzah.query(querry, function(err, rows){
+        if (err) console.log(err)
+        // Create the headers array
+        var headers = [];
+        for(var item in rows[0])
+            headers.push(item);
+        enabledHeaders = checkForShow(headers);
+        res.set('Access-Control-Allow-Origin', ['*'])
+        res.send(enabledHeaders);
+      })
+    }
+  }) 
 });
 
 serv.listen(3000, function () {

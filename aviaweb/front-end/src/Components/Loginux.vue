@@ -43,7 +43,11 @@
           this.$router.push(this.$route.query.redirect)
         }
       }
-    }
+    }/* ,
+    async beforeDestroy() {
+        await this.$store.dispatch('logout');
+        console.log(this.$store.state.userToken)
+    } */
   }
 
 </script>

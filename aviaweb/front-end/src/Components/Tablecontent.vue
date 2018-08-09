@@ -42,8 +42,8 @@ export default {
         this.fieldss = response
         console.log(this.fieldss)
         console.log(this.$store.getters.tableheaders) */
-        this.$store.dispatch('getheads');
-        console.log(this.$store.getters.tableheaders)
+/*         this.$store.dispatch('getheads');
+        console.log(this.$store.getters.tableheaders) */
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:3000/heads', false);
         try {
@@ -56,9 +56,8 @@ export default {
         imgType = imgType.replaceAll(","," ")       
         imgType = imgType.replaceAll("[","")       
         imgType = imgType.replaceAll("]","")       
-        this.fieldss = imgType.split(' ')
-        console.log(imgType)      
-    }
+        this.fieldss = imgType.split(' ')   
+    },
 
 }  
 

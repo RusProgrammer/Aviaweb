@@ -17,10 +17,12 @@
     "axios": "^0.18.0",
     "babel": "^6.23.0",
     "body-parser": "^1.18.3",
+    "bootstrap-vue": "^2.0.0-rc.11",
     "preset": "^1.0.0",
     "vue": "^2.5.11",
     "vue-auth": "^1.0.0-alpha.1",
     "vue-router": "^3.0.1",
+    "vue-tables-2": "^1.4.64",
     "vuetable": "^1.5.12",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
