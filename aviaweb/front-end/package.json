@@ -23,6 +23,7 @@
     "vue-auth": "^1.0.0-alpha.1",
     "vue-router": "^3.0.1",
     "vue-tables-2": "^1.4.64",
+    "vue-tree-navigation": "^3.0.1",
     "vuetable": "^1.5.12",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
