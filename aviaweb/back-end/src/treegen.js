@@ -20,16 +20,16 @@ Object.prototype.parseSqlResult = function () {
     return JSON.parse(JSON.stringify(this[0]))
 }
 
-function CreateTree(req, res){
+exports.CreateTree = function (req, res){
         jwt.verify(req.token, jwtsecret, (err, authdata)=>{
           if(err){
             res.sendStatus(403)
           }else{
             // Получим подсистемы
-            var querry = "select * from " + table + ";"
+            var querry = "select * from ref_subsystems;"
             connectionzah.query(querry, function(err, subsystems){
               if (err) throw err
-                console.log(subsystems.parseSqlResult())
+                console.log(subsystems)
                 res.set('Access-Control-Allow-Origin', ['*'])
                 res.send({data:subsystems});
             })
@@ -37,4 +37,3 @@ function CreateTree(req, res){
         }) 
 }
 
-export{CreateTree}

@@ -7,6 +7,8 @@ var mysql = require('mysql')
 const jwt = require('jsonwebtoken');
 const getMainMenu = require('./menu/mainMenu.js')
 
+var Tree =  require('./treegen')
+
 
 jwtsecret = 'fedosov'
 serv.use(bodyParser.json());
@@ -32,12 +34,17 @@ var connectionzah = mysql.createConnection({
   database: 'kardailskiy'
 })
 
+
 var connectionis = mysql.createConnection({
   host: '172.20.1.47',
   user: 'ishchenko',
   password: 'toor',
   database: 'ishchenko'
 })
+
+// Импортированная функция для формирования дерева
+serv.get('/api/data/subversion', verifyToken, Tree.CreateTree);
+
 
 // Функция, позволяющая удалить элемент из списка/массива
 Array.prototype.remove = function() {
@@ -163,9 +170,28 @@ serv.get('/api/tables', verifyToken, function(req, res){
       connectionzah.query(querry, function(err, rows){
         if (err) throw err
         res.set('Access-Control-Allow-Origin', ['*'])
-        if(rows.length>1)       
-          res.json({tables:rows});
-        else
+
+        if (err){
+           console.log("Tables SQL1 error in /api/tables")
+           throw err
+        }
+        // Transform from RowDataPacket reprezentation
+        if(rows.length>1) {   
+          console.log("Tables is OK /api/tables")   
+          var data = []
+          rows.forEach(row => {
+            for(var item in row)
+            {
+                // Add values only for the enabled headers
+                if(typeof(row[item])== String)
+                  data.push(row[item]);
+            }
+          });
+          console.log(data)
+          res.json({tables:data});
+        }
+        else{
+          console.log("Tables SQL error in /api/tables")
           res.sendStatus(403);
       })
     }
