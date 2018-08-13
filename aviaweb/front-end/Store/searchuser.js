@@ -47,9 +47,11 @@ async function logout({state, dispatch, commit}){
 }
 
 async function getTables({state, dispatch, commit}){
-    const url = 'http://localhost:3000/api/login'
-    let res = await axios.post(url,requestData, headers)
-    const Tables = res.data.token;
+    const url = 'http://localhost:3000/api/tables'
+    let res = await axios.get(url, 
+        {headers: 
+        {'Authorization':'Bearer ' + this.getters.userToken}})
+    const Tables = res.data.tables;
     return Tables;
 }
 

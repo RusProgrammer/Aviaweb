@@ -12,6 +12,7 @@ const strore = new Vuex.Store({
         results:[],
         logged: false,
         tableheaders: [],
+        tableselected: '',
         userToken: ''
     },
     getters:{

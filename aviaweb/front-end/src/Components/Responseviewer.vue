@@ -1,59 +1,64 @@
 <template>
-    <div id="ResponseGreed">
-        <div  v-for="(post, index1) in posts" :key="index1">
-            <span>{{ post.id }}</span> 
-            <h3>{{ post.title }}</h3> 
-            <p>{{ post.body }}</p> 
+    <div class="tablecontent">
+        <vuetable ref="vuetable"
+            :api-url = getApiUrl()
+            :fields="fieldss"
+            :http-options = httpOptions
+            pagination-path=""
+            :per-page="5"
+        ></vuetable>
+        <vuetable-pagination ref=""></vuetable-pagination>        
         </div>
-        <div class="editor">
-            <form @submit.prevent="savePost()">
-                <input type="text" placeholder="Заголовок" v-model="post.title">
-                <textarea placeholder="Заголовок" v-model="post.body"></textarea>
-                <button>Опубликовать</button>
-            </form> 
-        </div>
-    </div>
 </template>
 
 <script>
-    import axios from 'axios';
+import Vue from 'vue'
+import * as Vuetable from 'vuetable-2'
+import axios from 'axios';
+Vue.use(Vuetable)
+Vue.prototype.$http = axios
 
-    export default {
-        name: 'Responseview',
-        data () {  
-            return{ 
-                errors:[],
-                posts:[],
-                post:{}
-            }           
-        },
-        methods:{
-            savePost(){
-                axios.post('https://jsonplaceholder.typicode.com/posts', this.post)
-            },
-            getPost(){
-                var options ={
-                    params:{
-                        _start: 10,
-                        _limit: 5
-                    },
-                    headers:{
-                        'Content-Type' : 'application/json'
-                    }
-                }
-                axios.get('https://jsonplaceholder.typicode.com/posts', options)
-                .then((resp) => {
-                    this.posts = resp.data;
-                })
-                .catch((err) => {
-                    console.log(err)
-                    this.errors.push(err);
-                })
-            } 
-        },
-        created: function() {
-            this.getPost();
+String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
+
+export default {
+    comments:{
+        Vuetable
+    },
+    props:{
+        apiurl: String
+    },
+    data: function(){
+        return{
+            fieldss:[],
+            httpOptions: {headers:{Authorization: 'Bearer ' + this.$store.getters.userToken}}
         }
-    }
-</script>
+    },
+    methods:{
+        getApiUrl(){
+            return 'http://localhost:3000/api/data/tables/' + this.$store.state.tableselected
+        }
+    },
+    created(){
+        console.log(this.$store.state.tableselected)
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/api/data/headers/' + this.$store.state.tableselected, false);
+        xhr.setRequestHeader("Authorization", "Bearer " + this.$store.getters.userToken)
+        try {
+          xhr.send();
+        } catch(err) {
+            return;
+        };
+        var imgType = xhr.response   
+        imgType = imgType.replaceAll("\"","")       
+        imgType = imgType.replaceAll(","," ")       
+        imgType = imgType.replaceAll("[","")       
+        imgType = imgType.replaceAll("]","")       
+        this.fieldss = imgType.split(' ')   
+    },
 
+}  
+
+</script>

@@ -183,7 +183,8 @@ serv.get('/api/tables', verifyToken, function(req, res){
             for(var item in row)
             {
                 // Add values only for the enabled headers
-                if(typeof(row[item])== String)
+                console.log(typeof(row[item]))
+                if(typeof(row[item])== 'string')
                   data.push(row[item]);
             }
           });
