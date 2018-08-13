@@ -9,7 +9,7 @@
             </b-dropdown>     
         </div>
         <div v-else>
-            <b-button @click="findDropMenu(item.id)" href="item.opers"> {{ item.name }} </b-button>
+            <b-button @click="findDropMenu(item.id)" :href=item.opers> {{ item.name }} </b-button>
         </div>
         </b-button-group>
     </div>
@@ -36,6 +36,7 @@
                 console.log('after start: ', this.dataMenu[0].parent_id)
                 this.mainMenu.length=0;
                 for (var j=0; j<this.dataMenu.length; j++){
+                    this.dataMenu[j].opers="#"+this.dataMenu[j].opers;
                     if(this.dataMenu[j].parent_id===0){
                         this.mainMenu.push(this.dataMenu[j]);
                     }

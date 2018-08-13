@@ -2,18 +2,22 @@
   <div id="app">
     <img src="./assets/logo.png">
     <div class="ui container">
-      <Tablecontent></Tablecontent>
+      <!-- <Tablecontent></Tablecontent> -->
+      <myGlobalMenu></myGlobalMenu>
+      <TestedMenu></TestedMenu>
     </div>
   </div>
 </template>
 
 <script>
 import Tablecontent from './Components/Tablecontent'
+import TestedMenu from './Components/testedMenu'
 
 export default {
   name: 'app',
   components: {
-    Tablecontent
+    Tablecontent,
+    TestedMenu
   }
 }
 </script>

@@ -8,8 +8,16 @@
             row-dblclicked="showModal"
   ></vuetable>
       <vuetable-pagination ref=""></vuetable-pagination>
-      <b-modal id="dataLine" centered ref="MyModal">
+      <b-modal id="dataLine"
+      centered ref="MyModal"
+      hide-footer title="Enter actual title for modal">
+        <div text-center>
           Data in this line
+        </div>
+        <div>
+          <b-btn class="mt-3" variant="outline-danger" @click="pressCancel">Отменить</b-btn>
+          <b-btn class="mt-3" variant="outline-success" @click="pressSave">Сохранить</b-btn>
+        </div>
       </b-modal>
     </div>
 </template>
@@ -47,6 +55,12 @@ export default {
         },
         hideModal(){
             this.$ref.MyModal.hide()
+        },
+        pressSave(){
+            alert("Result press pressSave!");
+        },
+        pressCancel(){
+            alert("Result press pressCancel!");
         }
     },
     created(){

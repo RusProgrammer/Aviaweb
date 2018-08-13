@@ -33,6 +33,12 @@
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
               </li>
+              <li class="nav-item">
+                  <div id='myTestedMenu'>
+                    {{ menuData }}
+                    <myGlobalMenu></myGlobalMenu>
+                  </div>
+              </li>
             </ul>
           </div>
           <form class="form-inline my-2 my-lg-0">
@@ -49,7 +55,7 @@
         <h3>{{ post.title }}</h3> 
         <p>{{ post.body }}</p> 
     </div> -->
-
+    <script src="./src/Components/testedMenu.vue"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.min.js" charset="utf-8"></script>
     
     <script src="/dist/build.js"></script>
