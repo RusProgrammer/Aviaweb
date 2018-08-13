@@ -8,6 +8,9 @@ import Loginux from './Components/Loginux.vue'
 import testedMenu from './Components/testedMenu.vue'
 import Dropdown from './Components/etc/dropdown.vue'
 import store from '../Store/index.js'
+import Projecttree from './Components/Projecttree.vue'
+import Main from './Components/Main.vue'
+import Sortedtable from './Components/Sortedtable.vue'
 var VueAuth = require('vue-auth')
  
 Vue.use(VueAuth, {
@@ -23,10 +26,14 @@ var router = new VueRouter({
   routes:[
     {path: '/about', component: Dropdown},//about => About.vue
     {path: '/table', component: Table},//about => About.vue
+    {path: '/main', component: Main},//about => About.vue
+    {path: '/tree', component: Projecttree},//about => About.vue
+    {path: '/sortedtable', component: Sortedtable},//about => About.vue
     {path: '/app', component: App},//about => About.vue
     {path: '/login', component: Login, query: { redirect: '/table' }},
     {path: '/loginux', component: Loginux},
-    {path: '/testedmenu', component: testedMenu}
+    {path: '/testedmenu', component: testedMenu},
+    {path: '/refs', component: Responseviewer, props: true }
   ]
 })
 
