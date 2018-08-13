@@ -13,14 +13,14 @@
                 items: [
                     { name: 'Products', route: 'products' },        // #products
                     { name: 'About', route: 'about', children: [    // #about
-                        { name: 'Contact', children: [                  // category label
+                        { name: 'Contact', children: [              // category label
                         { name: 'E-mail', route: 'email' },         // #email
                         { name: 'Phone', route: 'phone' },          // #phone
                         ]},
                     ]},
                 ]
             }
-        }
+        },
     }
 </script>
 

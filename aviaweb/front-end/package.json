@@ -22,6 +22,7 @@
     "vue": "^2.5.11",
     "vue-auth": "^1.0.0-alpha.1",
     "vue-router": "^3.0.1",
+    "vue-splitpane": "^1.0.2",
     "vue-tables-2": "^1.4.64",
     "vue-tree-navigation": "^3.0.1",
     "vuetable": "^1.5.12",
