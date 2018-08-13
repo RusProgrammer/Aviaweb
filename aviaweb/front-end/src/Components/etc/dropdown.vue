@@ -42,13 +42,18 @@
             async getTables(){
                 var resp = await this.$store.dispatch('gettables');
                 this.data = resp;
+                console.log(this.data)
             },
             setSelectedTable(name){
-                console.log(name.item)
-                this.Tableselected = name.item
-                this.$store.state.tableselected = this.Tableselected
-                this.$router.push({ name: '/refs', query: { redirect: '/refs'}});
-                this.$router.push(this.$route.query.redirect)
+                // Пока не понятно, почему появляются пустые элементы в списке
+                if(name.item != null)
+                {
+                    console.log(name.item)
+                    this.Tableselected = name.item
+                    this.$store.state.tableselected = this.Tableselected
+                    this.$router.push({ name: '/refs', query: { redirect: '/refs'}});
+                    this.$router.push(this.$route.query.redirect)
+                }
             }
         },
         created() {

@@ -5,6 +5,8 @@ var mysql = require('mysql')
 //Auth modules
 const jwt = require('jsonwebtoken');
 
+var Tree =  require('./treegen')
+
 
 jwtsecret = 'fedosov'
 serv.use(bodyParser.json());
@@ -29,6 +31,9 @@ var connectionzah = mysql.createConnection({
   password: '321',
   database: 'kardailskiy'
 })
+
+// Импортированная функция для формирования дерева
+serv.get('/api/data/subversion', verifyToken, Tree.CreateTree);
 
 // Функция, позволяющая удалить элемент из списка/массива
 Array.prototype.remove = function() {
@@ -148,9 +153,11 @@ serv.get('/api/tables', verifyToken, function(req, res){
             for(var item in row)
             {
                 // Add values only for the enabled headers
-                data.push(row[item]);
+                if(typeof(row[item])== String)
+                  data.push(row[item]);
             }
           });
+          console.log(data)
           res.json({tables:data});
         }
         else{
