@@ -4,17 +4,23 @@
             api-url="http://localhost:3000/bab"
             :fields="fieldss"
             :http-options = httpOptions
+            v-b-modal = "'dataLine'"
+            row-dblclicked="showModal"
   ></vuetable>
       <vuetable-pagination ref=""></vuetable-pagination>
-    
+      <b-modal id="dataLine" centered ref="MyModal">
+          Data in this line
+      </b-modal>
     </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import * as Vuetable from 'vuetable-2'
+import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios';
 Vue.use(Vuetable)
+Vue.use(BootstrapVue)
 Vue.prototype.$http = axios
 
 String.prototype.replaceAll = function(search, replacement) {
@@ -36,6 +42,12 @@ export default {
         getFields() {
 
         },
+        showModal(){
+            this.$ref.MyModal.show()
+        },
+        hideModal(){
+            this.$ref.MyModal.hide()
+        }
     },
     created(){
         /* let response = this.$store.dispatch('getheads');

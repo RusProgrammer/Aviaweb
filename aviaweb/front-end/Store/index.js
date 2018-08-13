@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {searchusr, authusr, login, logout, getTables} from './searchuser.js'
+import {searchusr, authusr, login, logout, getTables, getMainMenu} from './searchuser.js'
 import {getHeaders} from './tablehelper.js'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -12,7 +12,6 @@ const strore = new Vuex.Store({
         results:[],
         logged: false,
         tableheaders: [],
-        tableselected: '',
         userToken: ''
     },
     getters:{
@@ -39,7 +38,8 @@ const strore = new Vuex.Store({
         login:login,
         logout:logout,
         getheads:getHeaders,
-        gettables:getTables
+        gettables:getTables,
+        testedmenu: getMainMenu
     },
     plugins: [createPersistedState()]
 })

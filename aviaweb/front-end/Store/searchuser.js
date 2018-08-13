@@ -47,12 +47,21 @@ async function logout({state, dispatch, commit}){
 }
 
 async function getTables({state, dispatch, commit}){
-    const url = 'http://localhost:3000/api/tables'
-    let res = await axios.get(url, 
-        {headers: 
-        {'Authorization':'Bearer ' + this.getters.userToken}})
-    const Tables = res.data.tables;
+    const url = 'http://localhost:3000/api/login'
+    let res = await axios.post(url,requestData, headers)
+    const Tables = res.data.token;
     return Tables;
 }
 
-export {authusr, searchusr, login, logout, getTables};
+// тестовое получение меню
+async function getMainMenu({state, dispatch, commit}, requestData){
+    const url = 'http://localhost:3000/api/testedmenu'
+    const headers ={
+        'Access-Control-Allow-Origin': ['*']
+    }
+    let res = await axios.post(url, requestData, headers)
+    const calcMenu = res.data;
+    return calcMenu;
+}
+
+export {authusr, searchusr, login, logout, getTables, getMainMenu};
