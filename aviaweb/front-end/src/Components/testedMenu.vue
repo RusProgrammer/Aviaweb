@@ -9,7 +9,7 @@
             </b-dropdown>     
         </div>
         <div v-else>
-            <b-button @click="findDropMenu(item.id)" > {{ item.name }} </b-button>
+            <b-button @click="findDropMenu(item.id)" href="item.opers"> {{ item.name }} </b-button>
         </div>
         </b-button-group>
     </div>
