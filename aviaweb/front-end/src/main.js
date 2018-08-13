@@ -39,12 +39,8 @@ var router = new VueRouter({
 
 const myTestedMenu = new Vue({
   el: '#myTestedMenu',
-  data: {
-    menuData: "Tested menu data"
-  },
-  components:{
-    'myGlobalMenu': testedMenu
-  }
+  store: store,
+  render: h =>h(testedMenu)
 })
 
 Vue.component('myGlobalMenu', testedMenu)

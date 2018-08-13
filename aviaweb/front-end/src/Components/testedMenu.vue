@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>Result</h1>
-        <hr>
         <b-button-group>
         <div v-for="(item, index) in mainMenu" :key="index" v-if="item.child==='true'">
             <b-dropdown v-bind:text="item.name" @toggle="findDropMenu(item.id)">
