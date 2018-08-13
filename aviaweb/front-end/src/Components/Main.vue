@@ -1,32 +1,29 @@
 <template>
     <div class="components-container">
       <d-down></d-down>
-      <split-pane v-on:resize="resize" :min-percent='20' split="vertical">
-        <template slot="paneL">
-          
-          <my-tree></my-tree>
-        </template>
-        
-
-        <template slot="paneR">
-
-          
-
-        </template>
-      </split-pane>
+      <Split style="height: 1000px;" :direction="vertical">
+    <SplitArea>
+        panel left
+    </SplitArea>
+    <SplitArea>
+        panel center
+    </SplitArea>
+</Split>
     </div>
-    </template>
+</template>
 
 <script>
     import Vue from 'vue'
-    import splitPane from 'vue-splitpane'
+    //import splitPane from 'vue-split-panel'
     import Tree from './Projecttree.vue'
     import dDown from './etc/dropdown.vue'
+    import VueSplit from 'vue-split-panel'
+    Vue.use(VueSplit)
     //Vue.use(splitPane);
     
     export default{
         components:{
-            'split-pane': splitPane,
+            'split-pane': VueSplit,
             'my-tree' : Tree,
             'd-down' : dDown
         },
