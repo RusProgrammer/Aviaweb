@@ -15,7 +15,7 @@
     Vue.use(ClientTable);
     export default{
         async created() {
-            const url = 'http://localhost:3000/api/data/tables/cases'
+            const url = 'http://localhost:3000/api/data/tables/ref_cases'
                 const headers ={
                     headers:{
                     'Authorization': 'Bearer ' + this.$store.getters.userToken
@@ -28,17 +28,17 @@
         data: function(){
             return {
                 ApiMet: [],
-                columns: ['CASE_ID', 'PHASE_ID', 'SIDE_ID', 'TEXT', 'testedAlert'],
+                columns: ['CASE_ID', 'CASE_NUM', 'PROCEDURE_ID', 'testedAlert'],
                 data: [],
                 options: {
                     headings: {
                         CASE_ID: 'Идентификатор кейза',
-                        PHASE_ID: 'Этап',
-                        SIDE_ID: 'Сторона',
+                        CASE_NUM: 'Номер',
+                        PROCEDURE_ID: 'Процедура',
                         testedAlert: ''
                     },
-                    sortable: ['CASE_ID', 'code'],
-                    filterable: ['CASE_ID', 'code'],
+                    sortable: ['CASE_ID'],
+                    filterable: ['CASE_ID'],
                     templates:{
                         testedAlert: 'edit'
                     }
@@ -76,7 +76,7 @@
 
     Vue.component('edit', {
         props: ['data', 'index', 'column'],
-        template: `<modalEditor></modalEditor>`
+        template: `<modalEditor :intIndex="this.index" :intData="this.data"></modalEditor>`
         // methods: {
         //     testedAlert(){
         //         alert("index curent line: "+ this.index);
