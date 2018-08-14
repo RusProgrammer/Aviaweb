@@ -2,12 +2,12 @@
     <div>
         <b-button-group>
         <div v-for="(item, index) in mainMenu" :key="index" v-if="item.child==='true'">
-            <b-dropdown v-bind:text="item.name" @toggle="findDropMenu(item.id)">
+            <b-nav-item-dropdown v-bind:text="item.name" @toggle="findDropMenu(item.id)">
             <b-dropdown-item v-for="(itemDrop, indexDrop) in dropMenu" :key="indexDrop" @click="getMainMenu(itemDrop.id)"> {{ itemDrop.name }} </b-dropdown-item>
-            </b-dropdown>     
+            </b-nav-item-dropdown>     
         </div>
         <div v-else>
-            <b-button @click="findDropMenu(item.id)" :href=item.opers> {{ item.name }} </b-button>
+            <b-nav-item @click="findDropMenu(item.id)" :href=item.opers> {{ item.name }} </b-nav-item>
         </div>
         </b-button-group>
     </div>
