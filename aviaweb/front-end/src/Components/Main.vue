@@ -1,14 +1,14 @@
 <template>
     <div class="components-container">
       <d-down></d-down>
-      <Split style="height: 1000px;" :direction="vertical">
-    <SplitArea>
-        panel left
-    </SplitArea>
-    <SplitArea>
-        panel center
-    </SplitArea>
-</Split>
+        <Split style="height: 2000px;" >
+            <SplitArea>
+                <my-tree></my-tree>
+            </SplitArea>
+            <SplitArea>
+                panel center
+            </SplitArea>
+        </Split>
     </div>
 </template>
 
@@ -31,6 +31,9 @@
             resize(){
                 console.log("Resize");
             }
+        },
+        created() {
+            this.$store.state.dropdownmethod = 'getsubversions'
         }
     }
     

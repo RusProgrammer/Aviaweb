@@ -1,15 +1,5 @@
 <template>
     <div id="droped">
-        <div class="btn-group dropright">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropright
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
         <b-dropdown id="ddown1" text="Все таблицы" class="m-md-2">
             <b-dropdown-item v-for="(item, index) in data" :key="index" @click="setSelectedTable({item})">{{item}}</b-dropdown-item>
         </b-dropdown>
@@ -40,15 +30,19 @@
         },
         methods:{
             async getTables(){
-                var resp = await this.$store.dispatch('gettables');
+                // TODO: Определить декорацию для метода
+                //this.$store.state.dropdownmethod = 'gettables'
+                var resp = await this.$store.dispatch(this.$store.state.dropdownmethod);
                 this.data = resp;
+                this.$store.state.dropdownmethod = ''
             },
             setSelectedTable(name){
                 console.log(name.item)
                 this.Tableselected = name.item
                 this.$store.state.tableselected = this.Tableselected
-                this.$router.push({ name: '/refs', query: { redirect: '/refs'}});
-                this.$router.push(this.$route.query.redirect)
+                // Пока отключим переход по таблицам
+                //this.$router.push({ name: '/refs', query: { redirect: '/refs'}});
+                //this.$router.push(this.$route.query.redirect)
             }
         },
         created() {

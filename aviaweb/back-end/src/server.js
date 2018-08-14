@@ -43,7 +43,8 @@ var connectionis = mysql.createConnection({
 })
 
 // Импортированная функция для формирования дерева
-serv.get('/api/data/subversion', verifyToken, Tree.CreateTree);
+serv.get('/api/data/subversion', verifyToken, Tree.GetSubversions);
+serv.post('/api/data/tree', verifyToken, Tree.CreateTree);
 
 
 // Функция, позволяющая удалить элемент из списка/массива
@@ -166,7 +167,7 @@ serv.get('/api/tables', verifyToken, function(req, res){
       console.log(req.token)
       res.sendStatus(403)
     }else{
-      var querry = "SHOW TABLES"
+      var querry = 'SHOW TABLES LIKE "ref_%"'
       connectionzah.query(querry, function(err, rows){
         if (err) throw err
         res.set('Access-Control-Allow-Origin', ['*'])
