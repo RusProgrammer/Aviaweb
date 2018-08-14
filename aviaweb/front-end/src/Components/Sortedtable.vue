@@ -11,6 +11,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import {ServerTable, ClientTable, Event} from 'vue-tables-2';
+    import modalWindowTemp from './editGridModal.vue';
     Vue.use(ClientTable);
     export default{
         async created() {
@@ -71,15 +72,17 @@
         }
     }
 }
+   Vue.component('modalEditor', modalWindowTemp)
 
     Vue.component('edit', {
         props: ['data', 'index', 'column'],
-        template: `<button class='edit' @click='testedAlert'>Редактировать</button>`,
-        methods: {
-            testedAlert(){
-                alert("Tested message", this.data);
-            }
-        }
+        template: `<modalEditor></modalEditor>`
+        // methods: {
+        //     testedAlert(){
+        //         alert("index curent line: "+ this.index);
+        //         this.modalWindowTemp.showModal();
+        //     }
+        //}
     })
 
 </script>
