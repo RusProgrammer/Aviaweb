@@ -17,4 +17,21 @@ async function getSubversions({state, dispatch, commit}){
     return Tables;
 }
 
-export {getHeaders, getSubversions};
+async function getTree({state, dispatch, commit}, requestData){
+    const url = ' http://localhost:3000/api/data/tree'
+    /* const Headers ={
+        headers:[
+            {'Access-Control-Allow-Origin': ['*']},
+            {'Authorization':'Bearer ' + this.getters.userToken}
+        ]
+    } */
+    const headers ={
+        'Authorization':'Bearer ' + this.getters.userToken
+    }
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' +  this.getters.userToken
+    let res = await axios.post(url,requestData, headers)
+    const Tree = res.data.tree;
+    return Tree;
+}
+
+export {getHeaders, getSubversions, getTree};

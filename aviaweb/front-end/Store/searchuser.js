@@ -46,6 +46,12 @@ async function logout({state, dispatch, commit}){
     commit('set', {type: 'userToken', items: ''});
 }
 
+
+function setTable({state, dispatch, commit}, data){
+    commit('set', {type: 'tableselected', items: data.tableselected});
+}
+
+
 async function getTables({state, dispatch, commit}){
     const url = 'http://localhost:3000/api/tables'
     let res = await axios.get(url, 
@@ -66,4 +72,4 @@ async function getMainMenu({state, dispatch, commit}, requestData){
     return calcMenu;
 }
 
-export {authusr, searchusr, login, logout, getTables, getMainMenu};
+export {authusr, searchusr, login, logout, getTables, getMainMenu, setTable};

@@ -3,7 +3,6 @@
         <b-dropdown id="ddown1" text="Все таблицы" class="m-md-2">
             <b-dropdown-item v-for="(item, index) in data" :key="index" @click="setSelectedTable({item})">{{item}}</b-dropdown-item>
         </b-dropdown>
-        <h3>{{selectedTable}}</h3>
     </div>
 </template>
 
@@ -39,7 +38,9 @@
             setSelectedTable(name){
                 console.log(name.item)
                 this.Tableselected = name.item
-                this.$store.state.tableselected = this.Tableselected
+                this.$store.dispatch('settable', {tableselected:name.item});
+                console.log(this.$store.getters.tableselected)
+                //this.$store.state.tableselected = this.Tableselected
                 // Пока отключим переход по таблицам
                 //this.$router.push({ name: '/refs', query: { redirect: '/refs'}});
                 //this.$router.push(this.$route.query.redirect)

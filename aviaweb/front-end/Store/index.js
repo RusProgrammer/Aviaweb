@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {searchusr, authusr, login, logout, getTables, getMainMenu} from './searchuser.js'
-import {getHeaders, getSubversions} from './tablehelper.js'
+import {searchusr, authusr, login, logout, getTables, getMainMenu, setTable} from './searchuser.js'
+import {getHeaders, getSubversions, getTree} from './tablehelper.js'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
@@ -31,6 +31,9 @@ const strore = new Vuex.Store({
         },
         dropdownmethod(state){
             return state.dropdownmethod
+        },
+        tableselected(state){
+            return state.tableselected
         }
     },
     mutations:{
@@ -45,7 +48,9 @@ const strore = new Vuex.Store({
         getheads:getHeaders,
         gettables:getTables,
         testedmenu: getMainMenu,
-        getsubversions: getSubversions
+        getsubversions: getSubversions,
+        gettree:getTree,
+        settable:setTable
     },
     plugins: [createPersistedState()]
 })

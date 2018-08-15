@@ -5,9 +5,13 @@ var mysql = require('mysql')
 //Auth modules
 const jwt = require('jsonwebtoken');
 
+var promiceQuery = require('./dbconfig.js').query;
+
+
 
 jwtsecret = 'fedosov'
 serv.use(bodyParser.json());
+//TODO: use connectionPool from https://ru.stackoverflow.com/questions/499826/%D0%9E%D0%B1%D1%8A%D1%8F%D1%81%D0%BD%D0%B8%D1%82%D0%B5-%D1%80%D0%B0%D0%B7%D0%BD%D0%B8%D1%86%D1%83-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mysql-createconnection-%D0%B8-mysql-createpool-%D0%B2-nodejs
 var connectionzah = mysql.createConnection({
     host: '172.20.1.47',
     user: 'fedosov',
@@ -42,16 +46,17 @@ Object.prototype.toTree = function () {
   return {name: this.toString()}
 }
 
+//TODO: use connectionPool
+// Функция для получения напроавлений/подсистем
 exports.GetSubversions = function (req, res){
         jwt.verify(req.token, jwtsecret, (err, authdata)=>{
           if(err){
             res.sendStatus(403)
           }else{
             // Получим подсистемы
-            var querry = "select * from ref_subsystems;"
-            connectionzah.query(querry, function(err, subsystems){
+            var query = "select * from ref_subsystems;"
+            connectionzah.query(query, function(err, subsystems){
               if (err) throw err
-                console.log(subsystems.getArraybyId('SHORT_NAME'))
                 res.set('Access-Control-Allow-Origin', ['*'])
                 res.send({tables:subsystems.getArraybyId('SHORT_NAME')});
             })
@@ -61,68 +66,83 @@ exports.GetSubversions = function (req, res){
 
 exports.CreateTree = async function datar (req, res){
   res.set('Access-Control-Allow-Origin', ['*'])
+  console.log('hello')
   var Tree = []
   jwt.verify(req.token, jwtsecret, async (err, authdata)=>{
     if(err){
       res.sendStatus(403)
     }else{
-      //var subsystem = req.body.subsystem
-      var subsystem = req.query.subsystem
-
-      // Получим номер в ыбранной подсистемы
-      var querry = 'select * from ref_subsystems where ref_subsystems.SHORT_NAME = "'+ subsystem +'";'
-      let dbData  = await connectionzah.query(querry)
-      console.log(dbData)
-      res.json({err:dbData._result});
-      
-      
-      /*,  function(err, subId){
-        if (err) throw err
-          if (subId.length != 1){
-            res.set('Access-Control-Allow-Origin', ['*'])
-            res.json({err:"Subsystem querry error"});
+      var subsystem = req.body.subsystem
+      console.log('subsystem',req.body)
+      //var subsystem = req.query.subsystem
+      // Получим номер в выбранной подсистемы
+       var query = 'select * from ref_subsystems where ref_subsystems.SHORT_NAME = "'+ subsystem +'";'
+       await promiceQuery(query)
+       .then(async function(subsystem){
+          if (subsystem.length != 1){
+            //TODO: Записать ошибку в лог. Может существовать только 1 запись, описывающая направление по данному запросу.
+            res.json({err:"Subsystem query error"});
           }
-
-          // В случае если всё - таки получилось определить ID выбранной подсистемы
-          else{
-
-            // Получим все существующие проекты проекты по выбранной системе
-            subId = subId[0].SUBSYSTEM_ID
-            var querry = 'select PROJECT_ID, PROJECT_NUM from ref_projects where ref_projects.SUBSYSTEM_ID = "' + subId + '";'
-            await connectionzah.query(querry, function(err, projectsdata){
-              if (err) throw err
-              var projIds = projectsdata.getArraybyId('PROJECT_ID')
-              var projNums = projectsdata.getArraybyId('PROJECT_NUM')
-
-              // Теперь для всех проектов найдём существующие процедуры
-              projectsdata.forEach(projectitem => {
-                var querry = 'select PROCEDURE_ID, PROCEDURE_NUM from ref_procedures where ref_procedures.PROJECT_ID = "' + projectitem.PROJECT_ID + '";'
-                await connectionzah.query(querry, function(err, proceduressdata){
-                  if (err) throw err
-                  if(proceduressdata.length !=0)
+          // Получим все существующие проекты проекты по выбранной системе
+          const subId = subsystem[0].SUBSYSTEM_ID
+          var query = 'select PROJECT_ID, PROJECT_NUM from ref_projects where ref_projects.SUBSYSTEM_ID = "' + subId + '";'
+          await promiceQuery(query)
+          .then(async function(projects){
+            // Теперь для всех проектов найдём существующие процедуры       
+            for(var i = 0; i < projects.length; i++){
+              var query = 'select PROCEDURE_ID, PROCEDURE_NUM from ref_procedures where ref_procedures.PROJECT_ID = "' + projects[i].PROJECT_ID + '";'
+              await promiceQuery(query)
+              .then(async function(procedures){
+                if (procedures.length != 0)
+                {
+                  // Теперь осталось лишь найти кейзы для процедур
+                  for(var j = 0; j < procedures.length; j++)
                   {
-                    // Теперь осталось лишь найти кейзы для процедур
-                    console.log('projId = ',projectitem.PROJECT_ID)
-                    console.log('projNum = ',projectitem.PROJECT_NUM)
-                    console.log(proceduressdata)
+                    var query = 'select CASE_ID, CASE_NUM from ref_cases where ref_cases.PROCEDURE_ID = "' + procedures[j].PROCEDURE_ID + '";'
+                    await promiceQuery(query)
+                    .then(async function(cases){
+                      if (cases.length != 0){
+                        // Тут уже добавляем полностью ноду в дерево
+                        var caseChilren = []
+                        for(var k = 0; k < cases.length; k++){
+                          caseChilren.push({name:cases[k].CASE_NUM})
+                        }
+                        // Сама соль)
+                        Tree.push({name: projects[i].PROJECT_NUM, children: [{name: procedures[j].PROCEDURE_NUM, children: caseChilren}]})
+                      }
+                      else{
+                        // Добавить в дерево процедуру без кейзов
+                        Tree.push({name: projects[i].PROJECT_NUM, children: [{name: procedures[j].PROCEDURE_NUM}]})
+                      }
+                    })
+                    .catch(function(err){
+                      //TODO: Записать ошибку в лог. Ошибка SQL 
+                      throw err;
+                    })
                   }
-                  // Добавим в дерево проект без процедур
-                  else{
-                    var temp = projectitem.PROJECT_NUM.toTree()
-                    Tree.push(temp)
-                  }
-                })               
-              });
-              console.log('fedosov')
-              res.send({data:Tree});
-            })
-            console.log(subId)
-            
-            
-          }
-          /* console.log(subsystems.getArraybyId('SHORT_NAME'))
-           
-      } */
+                }
+                else{
+                  // Добавить в дерево проект без процедур
+                  Tree.push(projects[i].PROJECT_NUM.toTree())
+                }
+              })
+              .catch(function (err){
+                //TODO: Записать ошибку в лог. Ошибка SQL 
+                throw err;
+              })
+            };
+          })
+          .catch(function(err){
+            //TODO: Записать ошибку в лог. Ошибка SQL 
+            throw err;
+          })
+       })
+       .catch(function(err){
+         //TODO: Записать ошибку в лог. Ошибка SQL  
+         throw err;
+       })
+      res.json({tree:Tree})
+      console.log('flag')         
     }
   })
 }

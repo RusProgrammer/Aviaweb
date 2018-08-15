@@ -1,9 +1,9 @@
 <template>
     <div class="components-container">
       <d-down></d-down>
-        <Split style="height: 2000px;" >
+        <Split style="height: 2000px;" @onDragStart ="resize">
             <SplitArea>
-                <my-tree></my-tree>
+                <my-tree :subversion="this.$store.state.tableselected"></my-tree>
             </SplitArea>
             <SplitArea>
                 panel center
@@ -30,6 +30,7 @@
         methods:{
             resize(){
                 console.log("Resize");
+                console.log(this.$store.getters.tableselected)
             }
         },
         created() {
