@@ -1,9 +1,12 @@
 <template>
-    <div id="sortedTable">
-        <v-client-table :columns="columns" :data="ApiMet" :options="options">
-            <a slot="uri" slot-scope="props" target="_blank" :href="props.row.uri" class="glyphicon glyphicon-eye-open"></a>
-        </v-client-table>
-        <button @click="getApiData()">aaa</button>
+    <div>
+        <div id="sortedTable">
+            <v-client-table :columns="columns" :data="ApiMet" :options="options">
+                <a slot="uri" slot-scope="props" target="_blank" :href="props.row.uri" class="glyphicon glyphicon-eye-open"></a>
+            </v-client-table>
+            <button @click="getApiData()">aaa+{{savedIndexGrid}}</button>
+        </div>
+        <modalEditor :intIndex="savedIndexGrid" :intData="savedDataGrid"></modalEditor>
     </div>
 </template>
 
@@ -27,8 +30,10 @@
         },
         data: function(){
             return {
+                savedIndexGrid: 0,
+                savedDataGrid: '',
                 ApiMet: [],
-                columns: ['CASE_ID', 'CASE_NUM', 'PROCEDURE_ID', 'testedAlert'],
+                columns: ['testedAlert', 'CASE_ID', 'CASE_NUM', 'PROCEDURE_ID'],
                 data: [],
                 options: {
                     headings: {
@@ -46,9 +51,6 @@
         }
     },
     methods:{
-        modalWindow(){
-            alert("modalWindow method WORK!");
-        },
         getApiData: async function(){
             const url = 'http://localhost:3000/api/data/tables/cases'
             const headers ={
@@ -70,19 +72,29 @@
                 console.log(err);
             }) */
         }
+    },
+    updated(){
+        this.$root.$on('sendIn', (inIndex) => {
+            this.savedIndexGrid = inIndex;
+        })
+        this.$root.$on('sendDat', (inData) => {
+            this.savedDataGrid = inData;
+        })
+        console.log("PRINT", this.savedIndexGrid)
     }
 }
    Vue.component('modalEditor', modalWindowTemp)
 
     Vue.component('edit', {
         props: ['data', 'index', 'column'],
-        template: `<modalEditor :intIndex="this.index" :intData="this.data"></modalEditor>`
-        // methods: {
-        //     testedAlert(){
-        //         alert("index curent line: "+ this.index);
-        //         this.modalWindowTemp.showModal();
-        //     }
-        //}
+        template: `<div><input @click="changeIndex(index, data)" type="radio" name="check" :savedIndexGrid="index" value="this.index"></div>`,
+        methods: {
+            changeIndex(inIndex, inData){
+                console.log("index curent line: "+inIndex);
+                this.$root.$emit('sendIn', inIndex);
+                this.$root.$emit('sendDat', inData);
+            }
+        }
     })
 
 </script>
