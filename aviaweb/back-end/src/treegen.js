@@ -59,12 +59,10 @@ exports.GetSubversions = function (req, res){
         }) 
 }
 
-exports.CreateTree = datar
-
-async function datar (req, res){
+exports.CreateTree = async function datar (req, res){
   res.set('Access-Control-Allow-Origin', ['*'])
   var Tree = []
-  jwt.verify(req.token, jwtsecret, (err, authdata)=>{
+  jwt.verify(req.token, jwtsecret, async (err, authdata)=>{
     if(err){
       res.sendStatus(403)
     }else{
@@ -72,8 +70,13 @@ async function datar (req, res){
       var subsystem = req.query.subsystem
 
       // Получим номер в ыбранной подсистемы
-      var querry = 'select SUBSYSTEM_ID from ref_subsystems where ref_subsystems.SHORT_NAME = "'+ subsystem +'";'
-      await connectionzah.query(querry, function(err, subId){
+      var querry = 'select * from ref_subsystems where ref_subsystems.SHORT_NAME = "'+ subsystem +'";'
+      let dbData  = await connectionzah.query(querry)
+      console.log(dbData)
+      res.json({err:dbData._result});
+      
+      
+      /*,  function(err, subId){
         if (err) throw err
           if (subId.length != 1){
             res.set('Access-Control-Allow-Origin', ['*'])
@@ -118,9 +121,9 @@ async function datar (req, res){
             
           }
           /* console.log(subsystems.getArraybyId('SHORT_NAME'))
-           */
-      })
+           
+      } */
     }
-  }) 
+  })
 }
 
