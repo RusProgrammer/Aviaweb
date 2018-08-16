@@ -23,8 +23,14 @@
             Необходимо выбрать данные для редактирования
         </div>
       </b-modal>
-        <div style="position: fixed; bottom: 2%; left: 50%;">
-            <button class="btn btn-outline-success my-2 my-sm-0" @click='showModal'>Редактировать</button>
+        <div >
+        <b-navbar type="light" variant="light" style="position: fixed; bottom: 0%; width: 100%;">
+            <a>Выбрано:
+                <input type="text" readonly="readonly" :value="Object.keys(intData)[0]" :size="String(Object.keys(intData)[0]).length"/>
+                <input type="text" readonly="readonly" :value="intData[Object.keys(intData)[0]]" :size="String(intData[Object.keys(intData)[0]]).length"/>
+            </a>
+            <b-button class="btn btn-outline-success my-2 my-sm-0" @click='showModal' left>Редактировать</b-button>
+        </b-navbar>
         </div>
     </div>
 </template>
