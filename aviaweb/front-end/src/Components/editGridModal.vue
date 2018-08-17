@@ -5,14 +5,17 @@
       hide-footer title="Редактируемые данные">
         <div text-center>
             <table>
-            <tr v-for="(item, index) in intData" :key="index">
+            <tr v-for="(item, index) in newData" :key="index">
                         <td>{{ index }}</td>
-                        <td><input type="text" :value="item"></td>
+                        <!-- <td><input type="text" :placeholder="intData[index]" @input="newData[index]=$event.target.value"></td> -->
+                        <!-- <td><input type="text" value="intData[index]" ></td> -->
+                        <!-- <td><input type="text" v-model="intData[index]" @change="changedValue(index, intData[index])"></td> -->
+                        <td><input type="text" v-model="newData[index]"/></td>
             </tr>
             </table>
         </div>
         <div>
-          <b-btn class="mt-3" variant="outline-success" @click="pressSave">Сохранить</b-btn>
+          <b-btn class="mt-3" variant="outline-success" @click="pressSave(newData)">Сохранить</b-btn>
           <b-btn class="mt-3" variant="outline-danger" @click="pressCancel">Отменить</b-btn>
         </div>
       </b-modal>
@@ -23,7 +26,7 @@
             Необходимо выбрать данные для редактирования
         </div>
       </b-modal>
-        <div >
+        <div>
         <b-navbar type="light" variant="light" style="position: fixed; bottom: 0%; width: 100%;">
             <a>Выбрано:
                 <input type="text" readonly="readonly" :value="Object.keys(intData)[0]" :size="String(Object.keys(intData)[0]).length"/>
@@ -44,7 +47,9 @@
         data () {
             return {
                 keys: [],
-                indexFromGrid: 0
+                indexFromGrid: 0,
+                newData: {},
+                oldData: {}
             }
         },
         methods:{
@@ -54,23 +59,38 @@
                     this.$refs.incorrectData.show()
                 }else{
                     this.$refs.MyModal.show()
+                this.newData=this.intData;
+                this.oldData=JSON.stringify(this.intData);
                 console.log("!INT", this.intIndex);
                 console.log("!DATA: ", this.intData);
+                console.log("!DATA new: ", this.newData);
+                return
                 }
             },
-            hideModal(){
+            pressCancel(){
+                if (this.oldData!==JSON.stringify(this.newData)){
+                    this.newData=JSON.parse(this.oldData);
+                }
+                console.log("curent data new: ", this.newData);
+                console.log("curent data new: ", this.intData);
+                // this.newData=null;
                 this.$refs.MyModal.hide()
             },
-            pressSave(){
-                alert("Result press pressSave!");
+            pressSave(newInput){
+                console.log("New data:", newInput);
+                console.log("Old data:", this.oldData);
+                if (this.oldData===JSON.stringify(this.newData)){
+                    alert("equal1");
+                }else{
+                    alert("equal2");
+                }
+                // this.newData=null;
+                this.$refs.MyModal.hide()
             },
-            pressCancel(){
-                alert("Result press pressCancel!");
+            changedValue(chanIndex, chanData){
+                console.log("INPUT DATA:",chanIndex, "  ", chanData);
+                console.log("Old data:", this.oldData);
             }
-            // startScript(){
-            //     console.log("DATA: ", this.intData);
-            //     // console.log("INDEX: ", this.indexFromGrid);
-            // }
         }
         // mounted() {
         //     this.startScript();
