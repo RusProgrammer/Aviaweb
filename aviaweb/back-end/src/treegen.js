@@ -95,6 +95,7 @@ exports.CreateTree = async function datar (req, res){
               .then(async function(procedures){
                 if (procedures.length != 0)
                 {
+                  var procArray = []
                   // Теперь осталось лишь найти кейзы для процедур
                   for(var j = 0; j < procedures.length; j++)
                   {
@@ -108,7 +109,7 @@ exports.CreateTree = async function datar (req, res){
                           caseChilren.push({name:cases[k].CASE_NUM})
                         }
                         // Сама соль)
-                        Tree.push({name: projects[i].PROJECT_NUM, children: [{name: procedures[j].PROCEDURE_NUM, children: caseChilren}]})
+                        procArray.push({name: procedures[j].PROCEDURE_NUM, children: caseChilren})
                       }
                       else{
                         // Добавить в дерево процедуру без кейзов
@@ -120,6 +121,8 @@ exports.CreateTree = async function datar (req, res){
                       throw err;
                     })
                   }
+                  if (procArray.length > 0)
+                    Tree.push({name: projects[i].PROJECT_NUM, children: procArray})
                 }
                 else{
                   // Добавить в дерево проект без процедур

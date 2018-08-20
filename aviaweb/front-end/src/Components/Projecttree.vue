@@ -1,7 +1,7 @@
 <template>
     <div id="userTree">
         <h3>Выбранное направление: {{this.subversion}}</h3>
-        <vue-tree-navigation :items="items" :defaultOpenLevel="1" @click="show()"/>
+        <vue-tree-navigation :items="items" :defaultOpenLevel="1" @click.native="show(this)"/>
     </div>
 </template>
 
@@ -23,8 +23,7 @@
                         ]},
                     ]},
                 ] */
-                items: [],
-                selectedProp: this.getItems(),
+                items: []
             }
         },
         watch:{
@@ -44,8 +43,8 @@
                 var resp = await this.$store.dispatch('gettree',{subsystem:this.subversion});
                 this.items = resp
             },
-            show(){
-                alert('123')
+            show(item ){
+                console.log('Clicked!', item)
             }
         }
     }
