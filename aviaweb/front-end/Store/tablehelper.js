@@ -31,6 +31,8 @@ async function getTree({state, dispatch, commit}, requestData){
     axios.defaults.headers.common['Authorization'] = 'Bearer ' +  this.getters.userToken
     let res = await axios.post(url,requestData, headers)
     const Tree = res.data.tree;
+    console.log('tree', Tree)
+    commit('updateTree', Tree);
     return Tree;
 }
 

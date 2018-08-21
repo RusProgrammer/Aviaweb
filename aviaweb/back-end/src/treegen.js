@@ -37,13 +37,13 @@ Object.prototype.getArraybyId = function () {
 Object.prototype.arrToTree = function () {
   var retData = []
   for(var i = 0; i < this.length; i ++){
-    retData.push({name:this[i]})
+    retData.push({text:this[i]})
   }
   return retData
 }
 
 Object.prototype.toTree = function () {
-  return {name: this.toString()}
+  return {text: this.toString()}
 }
 
 //TODO: use connectionPool
@@ -106,14 +106,14 @@ exports.CreateTree = async function datar (req, res){
                         // Тут уже добавляем полностью ноду в дерево
                         var caseChilren = []
                         for(var k = 0; k < cases.length; k++){
-                          caseChilren.push({name:cases[k].CASE_NUM})
+                          caseChilren.push({text:cases[k].CASE_NUM.toString()})
                         }
                         // Сама соль)
-                        procArray.push({name: procedures[j].PROCEDURE_NUM, children: caseChilren})
+                        procArray.push({text: procedures[j].PROCEDURE_NUM.toString(), children: caseChilren})
                       }
                       else{
                         // Добавить в дерево процедуру без кейзов
-                        Tree.push({name: projects[i].PROJECT_NUM, children: [{name: procedures[j].PROCEDURE_NUM}]})
+                        Tree.push({text: projects[i].PROJECT_NUM.toString(), children: [{text: procedures[j].PROCEDURE_NUM.toString()}]})
                       }
                     })
                     .catch(function(err){
@@ -122,7 +122,7 @@ exports.CreateTree = async function datar (req, res){
                     })
                   }
                   if (procArray.length > 0)
-                    Tree.push({name: projects[i].PROJECT_NUM, children: procArray})
+                    Tree.push({text: projects[i].PROJECT_NUM.toString(), children: procArray})
                 }
                 else{
                   // Добавить в дерево проект без процедур

@@ -14,7 +14,8 @@ const strore = new Vuex.Store({
         tableheaders: [],
         dropdownmethod:'',
         tableselected: '',
-        userToken: ''
+        userToken: '',
+        treestore:[]
     },
     getters:{
         results(state){
@@ -34,11 +35,20 @@ const strore = new Vuex.Store({
         },
         tableselected(state){
             return state.tableselected
+        },
+        treestore(state){
+            return state.treestore
         }
     },
     mutations:{
         set(state, {type, items}){
             state[type] = items;
+        },
+        initTree(state, {type, treeData}) {
+            state[type].treestore.push(...treeData)
+        },
+        updateTree(state, {type, treeData}) {
+            state[type] = treeData
         }
     },
     actions:{
